@@ -1,0 +1,66 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Ignore npm dependencies
+node_modules/
+
+# Ignore compiled code
+dist/
+
+# Ignore code coverage reports
+coverage/
+
+# Ignore log files
+*.log
+
+# Ignore TypeScript source maps
+*.js.map
+
+# Ignore npm lock files
+*.lock
+
+# Ignore any files that contain sensitive information
+*.env
+
+# Ignore any temporary files that are not necessary to track in Git
+*.tmp
