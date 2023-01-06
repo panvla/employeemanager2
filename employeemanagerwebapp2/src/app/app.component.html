@@ -11,16 +11,16 @@
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
-      <input type="search" #key="ngModel" ngModel name="key" id="searchName" class="form-control mr-sm-2"
-        placeholder="Search employees..." required>
+      <input type="search" #key="ngModel" ngModel (ngModelChange)="searchEmployees(key.value)" name="key"
+        id="searchName" class="form-control mr-sm-2" placeholder="Search employees..." required>
     </form>
   </div>
 </nav>
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container" id="main-container">
-  <div class="row mt-3">
+  <div class="row ">
     <div *ngFor="let employee of employees" class="col-md-6 col-xl-3">
-      <div class="card m-b-30">
+      <div class="card m-b-30 mt-3">
         <div class="card-body row">
           <div class="col-6">
             <a href=""><img src="{{ employee?.imageUrl}}" alt="" class="img-fluid rounded-circle w-60"></a>
@@ -37,10 +37,10 @@
         </ul>
         <div class="card-body">
           <div class="float-right btn-group btn-group-sm">
-            <a href="#" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip"
-              data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
-            <a href="#" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip"
-              data-original-title="Delete"><i class="fa fa-times"></i></a>
+            <a (click)="onOpenModal(employee, 'edit')" href="#" class="btn btn-primary tooltips" data-placement="top"
+              data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+            <a (click)="onOpenModal(employee, 'delete')" href="#" class="btn btn-secondary tooltips"
+              data-placement="top" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-times"></i></a>
           </div>
           <ul class="social-links list-inline mb-0">
             <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href=""
@@ -56,7 +56,7 @@
 
   </div>
 </div>
-
+<!--Add employee-->
 <div class="modal" fade id="addEmployeeModal" tabindex="-1" role="dialog" aria-lavelledby="addEmployeeModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -92,12 +92,93 @@
               required>
           </div>
           <div class="modal-footer">
-            <button type="submit" id="add-employee-form" data-dismiss="modal" class="btn btn-primary">Save
+            <button type="submit" class="btn btn-primary">Save
               changes</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="add-employee-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
           </div>
         </form>
       </div>
     </div>
+  </div>
+</div>
+<!--Update-->
+<div class="modal fade" id="updateEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit Employee {{editEmployee?.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editForm="ngForm">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" ngModel="{{ editEmployee?.name }}" name="name" class="form-control" id="name"
+              aria-describedby="emailHelp" placeholder="Name">
+          </div>
+          <div class="form-group">
+            <label for="name">Email</label>
+            <input type="text" ngModel="{{ editEmployee?.email }}" name="email" class="form-control" id="email"
+              aria-describedby="emailHelp" placeholder="Email">
+          </div>
+          <input type="hidden" ngModel="{{editEmployee?.id}}" name="id" class="form-control" id="id" placeholder="id">
+          <input type="hidden" ngModel="{{editEmployee?.employeeCode}}" name="employeeCode" class="form-control"
+            id="employeeCode" placeholder="employeeCode">
+          <div class="form-group">
+            <label for="jobTitle">Job title</label>
+            <input type="text" ngModel="{{editEmployee?.jobTitle}}" name="jobTitle" class="form-control" id="jobTitle"
+              placeholder="Job title">
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" ngModel="{{editEmployee?.phone}}" name="phone" class="form-control" id="phone"
+              placeholder="Phone">
+          </div>
+          <div class="form-group">
+            <label for="imageUrl">Image URL</label>
+            <input type="text" ngModel="{{editEmployee?.imageUrl}}" name="imageUrl" class="form-control" id="imageUrl"
+              placeholder="ImageUrl">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button (click)="onUpdateEmployee(editForm.value) " type="button" class="btn btn-primary"
+              data-dismiss="modal">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Delete-->
+<div class="modal fade" id="deleteEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete Employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete employee {{deleteEmployee?.name}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <button (click)="onDeleteEmployee(deleteEmployee?.id)" type="button" class="btn btn-primary"
+          data-dismiss="modal">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="employees?.length === 0" class="col-lg-12 col-md-12 col-xl-12">
+  <div class="alert alert-info" role="alert">
+    <h4 class="alert alert-info" role="alert">
+      <h4 class="alert-heading">NO EMPLOYEES!</h4>
+      <p>No Employee were found.</p>
+    </h4>
   </div>
 </div>
